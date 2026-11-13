@@ -43,5 +43,13 @@ EOT
       minimum_amount_currency = optional(string)
     })))
   }))
+  validation {
+    condition = alltrue([
+      for k, v in var.promotion_codes : (
+        v.promotion == null || alltrue([for item in v.promotion : (contains(["coupon"], item.type))])
+      )
+    ])
+    error_message = "must be one of: \"coupon\""
+  }
 }
 
